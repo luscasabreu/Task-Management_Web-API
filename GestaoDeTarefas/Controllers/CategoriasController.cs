@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestaoDeTarefas.Controllers
 {
-    [Route("controller")]
+    [Route("categorias")]
     [ApiController]
     public class CategoriasController : ControllerBase
     {
