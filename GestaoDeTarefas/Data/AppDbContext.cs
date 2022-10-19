@@ -8,7 +8,7 @@ namespace GestaoDeTarefas.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {}
 
-        DbSet<Tarefa>? Tarefas { get; set; }
-        DbSet<Categoria>? Categorias { get; set; }
+        public DbSet<Tarefa>? Tarefas { get; set; }
+        public DbSet<Categoria>? Categorias { get; set; }
     }
 }
