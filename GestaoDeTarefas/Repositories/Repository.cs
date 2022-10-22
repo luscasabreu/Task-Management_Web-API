@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace GestaoDeTarefas.Properties
+namespace GestaoDeTarefas.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -21,7 +21,7 @@ namespace GestaoDeTarefas.Properties
         public void Atualizar(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            _context.Set<T>().Update(entity); 
+            _context.Set<T>().Update(entity);
         }
 
         public IQueryable<T> Buscar()

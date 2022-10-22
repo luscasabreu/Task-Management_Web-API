@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
-namespace GestaoDeTarefas.Properties
+namespace GestaoDeTarefas.Repositories
 {
     public interface IRepository<T>
     {
