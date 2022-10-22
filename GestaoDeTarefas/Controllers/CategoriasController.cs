@@ -21,7 +21,7 @@ namespace GestaoDeTarefas.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Buscar()
         {
-            var categoria = _context.Categorias.ToList();
+            var categoria = _context.Categorias.AsNoTracking().ToList();
 
             if (categoria is null)
             {
@@ -32,7 +32,7 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet("{id:int}", Name = "CriandoCategoria")]
-        public async Task<ActionResult> Buscar(int id)
+        public ActionResult Buscar(int id)
         {
             var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
 
@@ -45,14 +45,14 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Criar(Categoria categoria)
+        public ActionResult Criar(Categoria categoria)
         {
             if (categoria is null)
             {
                 return BadRequest();
             }
 
-            _context.Categorias.AddAsync(categoria);
+            _context.Categorias.Add(categoria);
             _context.SaveChanges();
 
             return new CreatedAtRouteResult("CriandoCategoria", new { id = categoria.CategoriaId }, categoria);
@@ -61,7 +61,7 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Atualizar(int id, Categoria categoria)
+        public ActionResult Atualizar(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
             {
@@ -74,7 +74,7 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Deletar(int id)
+        public ActionResult Deletar(int id)
         {
             var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
 

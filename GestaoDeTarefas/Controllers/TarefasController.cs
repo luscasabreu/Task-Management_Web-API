@@ -20,7 +20,7 @@ namespace GestaoDeTarefas.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Tarefa>> Buscar()
         {
-            var tarefa = _context.Tarefas.ToList();
+            var tarefa = _context.Tarefas.AsNoTracking().ToList();
 
             if (tarefa is null)
             {
@@ -44,14 +44,14 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Tarefa>> Criar(Tarefa tarefa)
+        public ActionResult<Tarefa> Criar(Tarefa tarefa)
         {
             if (tarefa is null)
             {
                 return BadRequest();
             }
 
-            await _context.Tarefas.AddAsync(tarefa);
+            _context.Tarefas.Add(tarefa);
             _context.SaveChanges();
 
             return new CreatedAtRouteResult("CriarTarefa", new { id = tarefa.TarefaId, tarefa });
