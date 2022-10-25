@@ -1,8 +1,6 @@
-﻿using GestaoDeTarefas.Data;
-using GestaoDeTarefas.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using GestaoDeTarefas.Entities;
+using GestaoDeTarefas.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestaoDeTarefas.Controllers
@@ -11,17 +9,25 @@ namespace GestaoDeTarefas.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uof;
+    
 
-        public CategoriasController(AppDbContext context)
+        public CategoriasController(IUnitOfWork context)
         {
-            _context = context;
+            _uof = context;
+        }
+
+        [HttpGet("categoriaporproduto")]
+        public ActionResult<IEnumerable<Categoria>> BuscarCategoriaTarefa()
+        {
+            var categoriaTarefa = _uof.CategoriaRepository.BuscarCategoriaTarefa().ToList();
+            return Ok(categoriaTarefa);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Buscar()
         {
-            var categoria = _context.Categorias.AsNoTracking().ToList();
+            var categoria = _uof.CategoriaRepository.Buscar().AsNoTracking().ToList();
 
             if (categoria is null)
             {
@@ -34,7 +40,7 @@ namespace GestaoDeTarefas.Controllers
         [HttpGet("{id:int}", Name = "CriandoCategoria")]
         public ActionResult Buscar(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = _uof.CategoriaRepository.Buscar().FirstOrDefault(c => c.CategoriaId == id);
 
             if (categoria is null)
             {
@@ -52,8 +58,8 @@ namespace GestaoDeTarefas.Controllers
                 return BadRequest();
             }
 
-            _context.Categorias.Add(categoria);
-            _context.SaveChanges();
+            _uof.CategoriaRepository.Adicionar(categoria);
+            _uof.Salvar();
 
             return new CreatedAtRouteResult("CriandoCategoria", new { id = categoria.CategoriaId }, categoria);
 
@@ -67,8 +73,8 @@ namespace GestaoDeTarefas.Controllers
             {
                 return BadRequest();
             }
-            _context.Entry(categoria).State = EntityState.Modified;
-            _context.SaveChanges();
+            _uof.CategoriaRepository.Atualizar(categoria);
+            _uof.Salvar();
 
             return Ok(categoria);
         }
@@ -76,15 +82,15 @@ namespace GestaoDeTarefas.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Deletar(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = _uof.CategoriaRepository.Buscar().FirstOrDefault(c => c.CategoriaId == id);
 
             if(categoria is null)
             {
                 return NotFound();
             }
 
-            _context.Categorias.Remove(categoria);
-            _context.SaveChanges();
+            _uof.CategoriaRepository.Deletar(categoria);
+            _uof.Salvar();
 
             return Ok(categoria);
         }

@@ -1,5 +1,6 @@
 ﻿using GestaoDeTarefas.Data;
 using GestaoDeTarefas.Entities;
+using GestaoDeTarefas.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +11,17 @@ namespace GestaoDeTarefas.Controllers
     [ApiController]
     public class TarefasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uof;
 
-        public TarefasController(AppDbContext context)
+        public TarefasController(IUnitOfWork context)
         {
-            _context = context;
+            _uof = context;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Tarefa>> Buscar()
         {
-            var tarefa = _context.Tarefas.AsNoTracking().ToList();
+            var tarefa = _uof.TarefaRepository.Buscar().AsNoTracking().ToList();
 
             if (tarefa is null)
             {
@@ -33,7 +34,7 @@ namespace GestaoDeTarefas.Controllers
         [HttpGet("{id:int}", Name = "CriarTarefa")]
         public ActionResult<Tarefa> Buscar(int id)
         {
-            var tarefa = _context.Tarefas.FirstOrDefault(t => t.TarefaId == id);
+            var tarefa = _uof.TarefaRepository.Buscar().FirstOrDefault(t => t.TarefaId == id);
 
             if (id != tarefa.TarefaId)
             {
@@ -51,8 +52,8 @@ namespace GestaoDeTarefas.Controllers
                 return BadRequest();
             }
 
-            _context.Tarefas.Add(tarefa);
-            _context.SaveChanges();
+            _uof.TarefaRepository.Adicionar(tarefa);
+            _uof.Salvar();
 
             return new CreatedAtRouteResult("CriarTarefa", new { id = tarefa.TarefaId, tarefa });
             return Ok(tarefa);
@@ -66,8 +67,8 @@ namespace GestaoDeTarefas.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(tarefa).State = EntityState.Modified;
-            _context.SaveChanges();
+            _uof.TarefaRepository.Atualizar(tarefa);
+            _uof.Salvar(); ;
 
             return Ok(tarefa);
         }
@@ -75,15 +76,15 @@ namespace GestaoDeTarefas.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult<Tarefa> Deletar(int id)
         {
-            var tarefa = _context.Tarefas.FirstOrDefault(t => t.TarefaId == id);
+            var tarefa = _uof.TarefaRepository.Buscar().FirstOrDefault(t => t.TarefaId == id);
 
             if(tarefa is null)
             {
                 return BadRequest();
             }
 
-            _context.Tarefas.Remove(tarefa);
-            _context.SaveChanges();
+            _uof.TarefaRepository.Deletar(tarefa);
+            _uof.Salvar();
 
             return Ok(tarefa);
         }
