@@ -8,11 +8,7 @@ namespace GestaoDeTarefas.Repositories
     public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
         public CategoriaRepository(AppDbContext context) : base(context)
-        { }
-
-        public IEnumerable<Categoria> BuscarCategoriaTarefa()
         {
-            return Buscar().Include(x => x.Tarefas);
         }
 
     }

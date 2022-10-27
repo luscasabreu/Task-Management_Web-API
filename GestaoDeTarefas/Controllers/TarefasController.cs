@@ -1,5 +1,6 @@
 ﻿using GestaoDeTarefas.Data;
 using GestaoDeTarefas.Entities;
+using GestaoDeTarefas.PaginationService;
 using GestaoDeTarefas.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Tarefa>> Buscar()
+        public ActionResult<IEnumerable<Tarefa>> Buscar([FromQuery]TarefasParameters tarefasParameters)
         {
-            var tarefa = _uof.TarefaRepository.Buscar().AsNoTracking().ToList();
+            var tarefa = _uof.TarefaRepository.BuscarTarefas(tarefasParameters).ToList();
 
             if (tarefa is null)
             {
@@ -31,7 +32,7 @@ namespace GestaoDeTarefas.Controllers
             return Ok(tarefa);
         }
 
-        [HttpGet("{id:int}", Name = "CriarTarefa")]
+        [HttpGet("{id:int}", Name = "ObterTarefa")]
         public ActionResult<Tarefa> Buscar(int id)
         {
             var tarefa = _uof.TarefaRepository.Buscar().FirstOrDefault(t => t.TarefaId == id);
@@ -55,7 +56,7 @@ namespace GestaoDeTarefas.Controllers
             _uof.TarefaRepository.Adicionar(tarefa);
             _uof.Salvar();
 
-            return new CreatedAtRouteResult("CriarTarefa", new { id = tarefa.TarefaId, tarefa });
+            return new CreatedAtRouteResult("ObterTarefa", new { id = tarefa.TarefaId, tarefa });
             return Ok(tarefa);
         }
 

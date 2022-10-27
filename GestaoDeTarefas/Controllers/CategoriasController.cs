@@ -17,13 +17,6 @@ namespace GestaoDeTarefas.Controllers
             _uof = context;
         }
 
-        [HttpGet("categoriaporproduto")]
-        public ActionResult<IEnumerable<Categoria>> BuscarCategoriaTarefa()
-        {
-            var categoriaTarefa = _uof.CategoriaRepository.BuscarCategoriaTarefa().ToList();
-            return Ok(categoriaTarefa);
-        }
-
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Buscar()
         {
