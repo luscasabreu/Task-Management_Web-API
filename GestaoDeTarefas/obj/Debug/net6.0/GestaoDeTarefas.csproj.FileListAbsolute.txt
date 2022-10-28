@@ -60,3 +60,4 @@ C:\Projetos\GestaoDeTarefas\GestaoDeTarefas\obj\Debug\net6.0\GestaoDeTarefas.gen
 C:\Projetos\GestaoDeTarefas\GestaoDeTarefas\obj\Debug\net6.0\ref\GestaoDeTarefas.dll
 C:\Projetos\GestaoDeTarefas\GestaoDeTarefas\bin\Debug\net6.0\Humanizer.dll
 C:\Projetos\GestaoDeTarefas\GestaoDeTarefas\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Projetos\GestaoDeTarefas\GestaoDeTarefas\bin\Debug\net6.0\Newtonsoft.Json.dll

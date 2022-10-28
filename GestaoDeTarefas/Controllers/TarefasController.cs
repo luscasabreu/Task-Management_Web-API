@@ -5,6 +5,9 @@ using GestaoDeTarefas.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GestaoDeTarefas.Controllers
 {
@@ -22,7 +25,19 @@ namespace GestaoDeTarefas.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Tarefa>> Buscar([FromQuery]TarefasParameters tarefasParameters)
         {
-            var tarefa = _uof.TarefaRepository.BuscarTarefas(tarefasParameters).ToList();
+            var tarefa = _uof.TarefaRepository.BuscarTarefas(tarefasParameters);
+
+            var dados = new
+            {
+                tarefa.TotalCount,
+                tarefa.PageSize,
+                tarefa.CurrentPage,
+                tarefa.TotalPages,
+                tarefa.TemProximaPagina,
+                tarefa.TemPaginaAnterior
+            };
+
+            Response.Headers.Add("Paginacao", JsonConvert.SerializeObject(dados));
 
             if (tarefa is null)
             {

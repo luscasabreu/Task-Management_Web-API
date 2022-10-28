@@ -7,16 +7,19 @@ namespace GestaoDeTarefas.Repositories
     public class TarefaRepository : Repository<Tarefa>, ITarefaRepository
     {
         public TarefaRepository(AppDbContext context) : base(context)
-        {   
+        {
         }
 
-        public IEnumerable<Tarefa> BuscarTarefas(TarefasParameters tarefasParameters)
+        public PagedList<Tarefa> BuscarTarefas(TarefasParameters tarefasParameters)
         {
-            return _context.Tarefas
-                .OrderBy(n => n.Conclusao)
-                .Skip((tarefasParameters.PageNumber - 1) * tarefasParameters.PageSize)
-                .Take(tarefasParameters.PageSize)
-                .ToList();
+            //return _context.Tarefas
+            //   .OrderBy(n => n.Conclusao)
+            //   .Skip((tarefasParameters.PageNumber - 1) * tarefasParameters.PageSize)
+            //   .Take(tarefasParameters.PageSize)
+            //   .ToList();
+
+            return PagedList<Tarefa>
+                .ToPagedList(Buscar().OrderBy(o => o.Conclusao), tarefasParameters.PageNumber, tarefasParameters.PageSize);
         }
 
     }
