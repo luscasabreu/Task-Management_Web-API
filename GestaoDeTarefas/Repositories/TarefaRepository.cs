@@ -19,7 +19,7 @@ namespace GestaoDeTarefas.Repositories
             //   .ToList();
 
             return PagedList<Tarefa>
-                .ToPagedList(Buscar().OrderBy(o => o.Conclusao), tarefasParameters.PageNumber, tarefasParameters.PageSize);
+                .ToPagedList(Buscar().OrderBy(o => o.TarefaId), tarefasParameters.PageNumber, tarefasParameters.PageSize);
         }
 
     }
