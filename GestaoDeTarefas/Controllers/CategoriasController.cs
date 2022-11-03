@@ -1,7 +1,9 @@
 ﻿using GestaoDeTarefas.Entities;
+using GestaoDeTarefas.PaginationService;
 using GestaoDeTarefas.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace GestaoDeTarefas.Controllers
 {
@@ -18,9 +20,21 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Buscar()
+        public ActionResult<IEnumerable<Categoria>> Buscar([FromQuery] CategoriasParameters categoriasParameters)
         {
-            var categoria = _uof.CategoriaRepository.Buscar().AsNoTracking().ToList();
+            var categoria = _uof.CategoriaRepository.BuscarCategorias(categoriasParameters);
+
+            var dados = new
+            {
+                categoria.TotalCount,
+                categoria.PageSize,
+                categoria.CurrentPage,
+                categoria.TotalPages,
+                categoria.TemProximaPagina,
+                categoria.TemPaginaAnterior
+            };
+
+            Response.Headers.Add("Paginacao", JsonConvert.SerializeObject(dados));
 
             if (categoria is null)
             {
