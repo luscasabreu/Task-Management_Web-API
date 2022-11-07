@@ -10,7 +10,7 @@ namespace GestaoDeTarefas.Repositories
         {
         }
 
-        public PagedList<Tarefa> BuscarTarefas(TarefasParameters tarefasParameters)
+        public  async Task <PagedList<Tarefa>> BuscarTarefas(TarefasParameters tarefasParameters)
         {
             //return _context.Tarefas
             //   .OrderBy(n => n.Conclusao)
@@ -18,7 +18,7 @@ namespace GestaoDeTarefas.Repositories
             //   .Take(tarefasParameters.PageSize)
             //   .ToList();
 
-            return PagedList<Tarefa>
+            return await PagedList<Tarefa>
                 .ToPagedList(Buscar().OrderBy(o => o.TarefaId), tarefasParameters.PageNumber, tarefasParameters.PageSize);
         }
 

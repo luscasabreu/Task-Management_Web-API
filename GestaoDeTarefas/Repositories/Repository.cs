@@ -30,9 +30,9 @@ namespace GestaoDeTarefas.Repositories
         }
 
 
-        public T Buscar(Expression<Func<T, bool>> predicate)
+        public async Task<T> BuscarPorId(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().SingleOrDefault(predicate);
+            return await _context.Set<T>().SingleOrDefaultAsync(predicate);
         }
 
         public void Deletar(T entity)

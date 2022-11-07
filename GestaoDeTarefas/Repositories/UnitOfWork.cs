@@ -31,9 +31,9 @@ namespace GestaoDeTarefas.Repositories
             }
         } 
 
-        public void Salvar()
+        public async Task Salvar()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public void Dispose()

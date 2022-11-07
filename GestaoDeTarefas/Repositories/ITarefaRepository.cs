@@ -5,6 +5,6 @@ namespace GestaoDeTarefas.Repositories
 {
     public interface ITarefaRepository : IRepository<Tarefa>
     {
-        PagedList<Tarefa> BuscarTarefas(TarefasParameters tarefasParameters);
+        Task <PagedList<Tarefa>> BuscarTarefas(TarefasParameters tarefasParameters);
     }
 }

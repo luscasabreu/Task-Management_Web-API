@@ -20,9 +20,9 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> Buscar([FromQuery] CategoriasParameters categoriasParameters)
+        public async Task <ActionResult<IEnumerable<Categoria>>> Buscar([FromQuery] CategoriasParameters categoriasParameters)
         {
-            var categoria = _uof.CategoriaRepository.BuscarCategorias(categoriasParameters);
+            var categoria = await _uof.CategoriaRepository.BuscarCategorias(categoriasParameters);
 
             var dados = new
             {
@@ -42,12 +42,12 @@ namespace GestaoDeTarefas.Controllers
             }
 
             return Ok(categoria);
-        }
+        } 
 
         [HttpGet("{id:int}", Name = "CriandoCategoria")]
-        public ActionResult Buscar(int id)
+        public async Task<ActionResult<Categoria>> Buscar(int id)
         {
-            var categoria = _uof.CategoriaRepository.Buscar().FirstOrDefault(c => c.CategoriaId == id);
+            var categoria = await _uof.CategoriaRepository.Buscar().FirstOrDefaultAsync(c => c.CategoriaId == id);
 
             if (categoria is null)
             {
@@ -58,7 +58,7 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPost]
-        public ActionResult Criar(Categoria categoria)
+        public async Task <ActionResult<Categoria>> Criar(Categoria categoria)
         {
             if (categoria is null)
             {
@@ -66,7 +66,7 @@ namespace GestaoDeTarefas.Controllers
             }
 
             _uof.CategoriaRepository.Adicionar(categoria);
-            _uof.Salvar();
+            await _uof.Salvar();
 
             return new CreatedAtRouteResult("CriandoCategoria", new { id = categoria.CategoriaId }, categoria);
 
@@ -74,20 +74,20 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult Atualizar(int id, Categoria categoria)
+        public async Task <ActionResult<Categoria>> Atualizar(int id, Categoria categoria)
         {
             if (id != categoria.CategoriaId)
             {
                 return BadRequest();
             }
             _uof.CategoriaRepository.Atualizar(categoria);
-            _uof.Salvar();
+            await _uof.Salvar();
 
             return Ok(categoria);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Deletar(int id)
+        public async Task <ActionResult<Categoria>> Deletar(int id)
         {
             var categoria = _uof.CategoriaRepository.Buscar().FirstOrDefault(c => c.CategoriaId == id);
 
@@ -97,7 +97,7 @@ namespace GestaoDeTarefas.Controllers
             }
 
             _uof.CategoriaRepository.Deletar(categoria);
-            _uof.Salvar();
+            await _uof.Salvar();
 
             return Ok(categoria);
         }

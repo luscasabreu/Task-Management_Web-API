@@ -12,9 +12,9 @@ namespace GestaoDeTarefas.Repositories
         {
         }
 
-        public PagedList<Categoria> BuscarCategorias(CategoriasParameters categoriasParameters)
+        public async Task <PagedList<Categoria>> BuscarCategorias(CategoriasParameters categoriasParameters)
         {
-            return PagedList<Categoria>
+            return  await PagedList<Categoria>
                 .ToPagedList(Buscar().OrderBy(o => o.CategoriaId), categoriasParameters.PageNumber, categoriasParameters.PageSize);
         }
 

@@ -23,9 +23,9 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Tarefa>> Buscar([FromQuery]TarefasParameters tarefasParameters)
+        public async Task <ActionResult<IEnumerable<Tarefa>>> Buscar([FromQuery]TarefasParameters tarefasParameters)
         {
-            var tarefa = _uof.TarefaRepository.BuscarTarefas(tarefasParameters);
+            var tarefa = await _uof.TarefaRepository.BuscarTarefas(tarefasParameters);
 
             var dados = new
             {
@@ -48,9 +48,9 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObterTarefa")]
-        public ActionResult<Tarefa> Buscar(int id)
+        public async Task <ActionResult<Tarefa>> BuscarPorId(int id)
         {
-            var tarefa = _uof.TarefaRepository.Buscar().FirstOrDefault(t => t.TarefaId == id);
+            var tarefa = await _uof.TarefaRepository.Buscar().FirstOrDefaultAsync(t => t.TarefaId == id);
 
             if (id != tarefa.TarefaId)
             {
@@ -61,7 +61,7 @@ namespace GestaoDeTarefas.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Tarefa> Criar(Tarefa tarefa)
+        public async Task <ActionResult<Tarefa>> Criar(Tarefa tarefa)
         {
             if (tarefa is null)
             {
@@ -69,14 +69,14 @@ namespace GestaoDeTarefas.Controllers
             }
 
             _uof.TarefaRepository.Adicionar(tarefa);
-            _uof.Salvar();
+            await _uof.Salvar();
 
             return new CreatedAtRouteResult("ObterTarefa", new { id = tarefa.TarefaId, tarefa });
             return Ok(tarefa);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<Tarefa> Atualizar(int id, Tarefa tarefa)
+        public async Task <ActionResult<Tarefa>> Atualizar(int id, Tarefa tarefa)
         {
             if (tarefa is null)
             {
@@ -84,13 +84,13 @@ namespace GestaoDeTarefas.Controllers
             }
 
             _uof.TarefaRepository.Atualizar(tarefa);
-            _uof.Salvar(); ;
+            await _uof.Salvar(); ;
 
             return Ok(tarefa);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult<Tarefa> Deletar(int id)
+        public async Task <ActionResult<Tarefa>> Deletar(int id)
         {
             var tarefa = _uof.TarefaRepository.Buscar().FirstOrDefault(t => t.TarefaId == id);
 
@@ -100,7 +100,7 @@ namespace GestaoDeTarefas.Controllers
             }
 
             _uof.TarefaRepository.Deletar(tarefa);
-            _uof.Salvar();
+            await _uof.Salvar();
 
             return Ok(tarefa);
         }

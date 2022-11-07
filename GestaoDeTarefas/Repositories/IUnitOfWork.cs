@@ -4,6 +4,6 @@
     {
         public ICategoriaRepository CategoriaRepository { get; }
         public ITarefaRepository TarefaRepository { get; }
-        void Salvar();
+        Task Salvar();
     }
 }
